@@ -9,7 +9,7 @@ public class MainActivity extends AppCompatActivity {
 
     ViewSelection buttons;
     String text[] = {"shahab", "mammad", "shakib"};
-    @Override
+    @Override 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_main );
