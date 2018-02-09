@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ViewSelection">
+        <attr name="number_of_views" format="integer"></attr>
+        <attr name="unselected_background" format="reference"></attr>
+        <attr name="selected_background" format="reference"></attr>
+        <attr name="button_type" format="boolean"></attr>
+        <attr name="edittext_type" format="boolean"></attr>
+        <attr name="single_select" format="boolean"></attr>
+    </declare-styleable>
+
+</resources>
