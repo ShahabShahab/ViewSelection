@@ -8,7 +8,7 @@ import tk.medlynk.shahab.viewselection.R;
 public class MainActivity extends AppCompatActivity {
 
     ViewSelection buttons;
-    String text[] = {"shahab", "mammad", "shakib"}; 
+    String text[] = {"shahab", "mammad", "shakib"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
