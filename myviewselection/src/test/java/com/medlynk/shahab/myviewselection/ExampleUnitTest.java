@@ -1,4 +1,4 @@
-package tk.medlynk.shahab.viewselection;
+package com.medlynk.shahab.myviewselection;
 
 import org.junit.Test;
 

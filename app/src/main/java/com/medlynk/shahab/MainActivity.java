@@ -1,9 +1,9 @@
-package tk.medlynk.shahab;
+package com.medlynk.shahab;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import tk.medlynk.shahab.viewselection.R;
+import com.medlynk.shahab.viewselection.R;
 
 public class MainActivity extends AppCompatActivity {
 

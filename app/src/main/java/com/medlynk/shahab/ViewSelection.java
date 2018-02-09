@@ -1,4 +1,4 @@
-package tk.medlynk.shahab;
+package com.medlynk.shahab;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.medlynk.shahab.viewselection.R;
+import com.medlynk.shahab.viewselection.R;
 
 /**
  * Created by Shahab on 2/9/2018...
