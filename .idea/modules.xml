@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ViewSelection.iml" filepath="$PROJECT_DIR$/ViewSelection.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/myviewselection/myviewselection.iml" filepath="$PROJECT_DIR$/myviewselection/myviewselection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myviewselection-debug/myviewselection-debug.iml" filepath="$PROJECT_DIR$/myviewselection-debug/myviewselection-debug.iml" />
     </modules>
   </component>
 </project>

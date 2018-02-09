@@ -1,1 +1,1 @@
-include ':app', ':myviewselection'
+include ':app', ':myviewselection', ':myviewselection-debug'
