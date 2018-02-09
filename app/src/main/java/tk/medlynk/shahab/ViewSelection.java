@@ -104,19 +104,15 @@ public class ViewSelection extends LinearLayout {
             }
         }
     }
-
     public void setTextToButtons( String text, int position ){
         buttons.get ( position ).setText ( text );
     }
-
     public void setTextToEditTexts( String text, int position ){
         editTexts.get ( position ).setText ( text );
     }
-
     public int getNumberOfViews(){
         return numOfViews;
     }
-
     public int getCurrentSelection() {
         return currentSelection;
     }
