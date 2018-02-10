@@ -28,8 +28,9 @@ public class ViewSelection extends LinearLayout {
     Boolean single_select = false;
     private int currentSelection = -1;
     private Drawable selected_state, unselected_state;
+    private int selected_text_color, unselected_text_color;
 
-    private OnClickListener mOnClickListener = new View.OnClickListener (){
+    private OnClickListener button_on_click_listener = new View.OnClickListener (){
         @Override
         public void onClick(View view) {
             currentSelection = view.getId ();
@@ -72,6 +73,7 @@ public class ViewSelection extends LinearLayout {
         LinearLayout linearLayout = view.findViewById ( R.id.parent );
         TypedArray typedArray = context.
                 obtainStyledAttributes(attrs, R.styleable.ViewSelection, 0, 0);
+        
         single_select = typedArray.getBoolean ( R.styleable.ViewSelection_single_select, false );
         if( typedArray.hasValue ( R.styleable.ViewSelection_number_of_views)){
             numOfViews = typedArray.getInt ( R.styleable.ViewSelection_number_of_views, 1 );
@@ -87,7 +89,7 @@ public class ViewSelection extends LinearLayout {
                         layoutParams.setMargins ( 10, 10, 10, 10 );
                         button.setLayoutParams ( layoutParams );
                         button.setId ( i );
-                        button.setOnClickListener ( mOnClickListener );
+                        button.setOnClickListener ( button_on_click_listener );
                         buttons.add ( button );
                         linearLayout.addView ( button );
                     }

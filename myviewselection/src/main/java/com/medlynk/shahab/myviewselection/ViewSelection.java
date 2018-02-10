@@ -26,24 +26,81 @@ public class ViewSelection extends LinearLayout {
     Boolean single_select = false;
     private int currentSelection = -1;
     private Drawable selected_state, unselected_state;
+    private int selected_text_color, unselected_text_color;
 
-    private OnClickListener mOnClickListener = new OnClickListener (){
+    public List<Button> getButtons() {
+        return buttons;
+    }
+
+    public void setButtons(List<Button> buttons) {
+        this.buttons = buttons;
+    }
+
+    public List<EditText> getEditTexts() {
+        return editTexts;
+    }
+
+    public void setEditTexts(List<EditText> editTexts) {
+        this.editTexts = editTexts;
+    }
+
+    public int getNumOfViews() {
+        return numOfViews;
+    }
+
+    public void setNumOfViews(int numOfViews) {
+        this.numOfViews = numOfViews;
+    }
+
+    public Boolean getSingle_select() {
+        return single_select;
+    }
+
+    public void setSingle_select(Boolean single_select) {
+        this.single_select = single_select;
+    }
+
+    public void setCurrentSelection(int currentSelection) {
+        this.currentSelection = currentSelection;
+    }
+
+    public Drawable getSelected_state() {
+        return selected_state;
+    }
+
+    public void setSelected_state(Drawable selected_state) {
+        this.selected_state = selected_state;
+    }
+
+    public Drawable getUnselected_state() {
+        return unselected_state;
+    }
+
+    public void setUnselected_state(Drawable unselected_state) {
+        this.unselected_state = unselected_state;
+    }
+
+    private OnClickListener button_click_listener = new OnClickListener (){
         @Override
         public void onClick(View view) {
             currentSelection = view.getId ();
             if( single_select ){
                 for (Button button : buttons) {
                     if( button.getId () == currentSelection){
+                        button.setTextColor ( selected_text_color );
                         button.setBackgroundDrawable ( selected_state );
                     }else{
                         button.setBackgroundDrawable ( unselected_state );
+                        button.setTextColor ( unselected_text_color );
                     }
                 }
             }else{
-                if( buttons.get ( currentSelection ).getBackground ().equals ( selected_state ) )
+                if( buttons.get ( currentSelection ).getBackground ().equals ( selected_state ) ) {
                     buttons.get ( currentSelection ).setBackgroundDrawable ( unselected_state );
-                else{
+                    buttons.get ( currentSelection ).setTextColor (unselected_text_color);
+                }else{
                     buttons.get ( currentSelection ).setBackgroundDrawable ( selected_state );
+                    buttons.get ( currentSelection ).setTextColor ( selected_text_color );
                 }
             }
         }
@@ -70,6 +127,8 @@ public class ViewSelection extends LinearLayout {
         LinearLayout linearLayout = view.findViewById ( R.id.parent );
         TypedArray typedArray = context.
                 obtainStyledAttributes(attrs, R.styleable.ViewSelection, 0, 0);
+        selected_text_color = typedArray.getInt ( R.styleable.ViewSelection_selected_text_color, context.getResources ().getColor ( R.color.selected_text_clolor ) );
+        unselected_text_color = typedArray.getInt ( R.styleable.ViewSelection_unselected_text_color, context.getResources ().getColor ( R.color.unselected_text_color ) );
         single_select = typedArray.getBoolean ( R.styleable.ViewSelection_single_select, false );
         if( typedArray.hasValue ( R.styleable.ViewSelection_number_of_views)){
             numOfViews = typedArray.getInt ( R.styleable.ViewSelection_number_of_views, 1 );
@@ -85,7 +144,7 @@ public class ViewSelection extends LinearLayout {
                         layoutParams.setMargins ( 10, 10, 10, 10 );
                         button.setLayoutParams ( layoutParams );
                         button.setId ( i );
-                        button.setOnClickListener ( mOnClickListener );
+                        button.setOnClickListener ( button_click_listener );
                         buttons.add ( button );
                         linearLayout.addView ( button );
                     }

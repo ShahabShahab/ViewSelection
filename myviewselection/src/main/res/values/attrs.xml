@@ -7,6 +7,8 @@
         <attr name="button_type" format="boolean"></attr>
         <attr name="edittext_type" format="boolean"></attr>
         <attr name="single_select" format="boolean"></attr>
+        <attr name="selected_text_color" format="reference"></attr>
+        <attr name="unselected_text_color" format="reference"></attr>
     </declare-styleable>
 
 </resources>
