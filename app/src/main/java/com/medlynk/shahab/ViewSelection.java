@@ -116,4 +116,21 @@ public class ViewSelection extends LinearLayout {
     public int getCurrentSelection() {
         return currentSelection;
     }
+
+    public void setSelectedBackground(Drawable selected_state) {
+        this.selected_state = selected_state;
+    }
+
+    public Drawable getSelected_state() {
+        return selected_state;
+    }
+
+    public void setUnselected_state(Drawable unselected_state) {
+        this.unselected_state = unselected_state;
+    }
+
+    public Drawable getUnselected_state() {
+        return unselected_state;
+    }
 }
+
