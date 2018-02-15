@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ViewSelection">
+
         <attr name="number_of_views" format="integer"></attr>
         <attr name="unselected_background" format="reference"></attr>
         <attr name="selected_background" format="reference"></attr>
@@ -9,6 +10,10 @@
         <attr name="single_select" format="boolean"></attr>
         <attr name="selected_text_color" format="reference"></attr>
         <attr name="unselected_text_color" format="reference"></attr>
+        <attr name="selectable" format="boolean"></attr>
+        <attr name="unselectable_background" format="reference"></attr>
+        <attr name="unselectable_text_color" format="reference"></attr>
+
     </declare-styleable>
 
 </resources>

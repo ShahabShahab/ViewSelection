@@ -23,13 +23,46 @@ public class ViewSelection extends LinearLayout {
     List<Button> buttons = new ArrayList<> (  );
     List<EditText> editTexts = new ArrayList<> (  );
     int numOfViews = 0;
-    Boolean single_select = false;
+    Boolean selectable = false;
     private int currentSelection = -1;
-    private Drawable selected_state, unselected_state;
-    private int selected_text_color, unselected_text_color;
+    private int selected_state_background;
+    private int unselected_state_background;
+    private int unselectable_background;
+
+    private int selected_text_color, unselected_text_color, unselectable_text_color;
     private OnSingleItemSelectedListener onSingleItemSelectedListener;
     private OnMultiItemSelectedListener onMultiItemSelectedListener;
+    private Context mContext;
+    Boolean single_select = false;
+    Boolean button_type = false;
+    Boolean edittext_type = false;
+    private Drawable selected_state_drawable;
+    private Drawable unselected_state_drawbale;
+    private Drawable unselectable_drawable;
 
+    public int getUnselectable_background() {
+        return unselectable_background;
+    }
+
+    public void setUnselectable_background(int unselectable_background) {
+        this.unselectable_background = unselectable_background;
+    }
+
+    public Context getmContext() {
+        return mContext;
+    }
+
+    public void setmContext(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public Boolean getSelectable() {
+        return selectable;
+    }
+
+    public void setSelectable(Boolean selectable) {
+        this.selectable = selectable;
+    }
     public OnMultiItemSelectedListener getOnMultiItemSelectedListener() {
         return onMultiItemSelectedListener;
     }
@@ -82,46 +115,64 @@ public class ViewSelection extends LinearLayout {
         this.currentSelection = currentSelection;
     }
 
-    public Drawable getSelected_state() {
-        return selected_state;
+    public int getSelected_state_background() {
+        return selected_state_background;
     }
 
-    public void setSelected_state(Drawable selected_state) {
-        this.selected_state = selected_state;
+    public void setSelected_state_background(int selected_state_background) {
+        this.selected_state_background = selected_state_background;
     }
 
-    public Drawable getUnselected_state() {
-        return unselected_state;
+    public int getUnselected_state_background() {
+        return unselected_state_background;
     }
 
-    public void setUnselected_state(Drawable unselected_state) {
-        this.unselected_state = unselected_state;
+    public void setUnselected_state_background(int unselected_state_background) {
+        this.unselected_state_background = unselected_state_background;
     }
 
     private OnClickListener button_click_listener = new OnClickListener (){
         @Override
         public void onClick(View view) {
             currentSelection = view.getId ();
-            if( single_select ){
-                onSingleItemSelectedListener.onSingleItemSelected ( currentSelection );
-                for (Button button : buttons) {
-                    if( button.getId () == currentSelection){
-                        button.setTextColor ( selected_text_color );
-                        button.setBackgroundDrawable ( selected_state );
+            if (selectable) {
+                if( single_select ){
+                    if( onSingleItemSelectedListener == null ){
+                        throw new RuntimeException ( getmContext ().toString () + "must implement " + OnSingleItemSelectedListener.class.getSimpleName () );
+                    }else
+                        onSingleItemSelectedListener.onSingleItemSelected ( currentSelection );
+                    for (Button button : buttons) {
+                        if( button.getId () == currentSelection){
+                            button.setTextColor ( selected_text_color );
+                            button.setBackground ( selected_state_drawable );
+                        }else{
+                            button.setBackground ( unselected_state_drawbale );
+                            button.setTextColor ( unselected_text_color );
+                        }
+                    }
+                }else{
+                    if( buttons.get ( currentSelection ).getBackground ().equals ( selected_state_drawable ) ) {
+                        buttons.get ( currentSelection ).setBackground ( unselected_state_drawbale );
+                        buttons.get ( currentSelection ).setTextColor (unselected_text_color);
+                        if( onMultiItemSelectedListener == null ){
+                            throw new RuntimeException ( getmContext ().toString () + "must implement " + OnMultiItemSelectedListener.class.getSimpleName () );
+                        }else{
+                            onMultiItemSelectedListener.onMultiItemDeselected ( currentSelection );
+                        }
                     }else{
-                        button.setBackgroundDrawable ( unselected_state );
-                        button.setTextColor ( unselected_text_color );
+                        if( onMultiItemSelectedListener == null ){
+                            throw new RuntimeException ( getmContext ().toString () + " must implement " + OnMultiItemSelectedListener.class.getSimpleName () );
+                        }else{
+                            onMultiItemSelectedListener.onMultiItemSelected ( currentSelection );
+                        }
+                        buttons.get ( currentSelection ).setBackground ( selected_state_drawable );
+                        buttons.get ( currentSelection ).setTextColor ( selected_text_color );
                     }
                 }
             }else{
-                if( buttons.get ( currentSelection ).getBackground ().equals ( selected_state ) ) {
-                    buttons.get ( currentSelection ).setBackgroundDrawable ( unselected_state );
-                    buttons.get ( currentSelection ).setTextColor (unselected_text_color);
-                    onMultiItemSelectedListener.onMultiItemDeselected ( currentSelection );
-                }else{
-                    onMultiItemSelectedListener.onMultiItemSelected ( currentSelection );
-                    buttons.get ( currentSelection ).setBackgroundDrawable ( selected_state );
-                    buttons.get ( currentSelection ).setTextColor ( selected_text_color );
+                for (Button button: buttons){
+                    button.setBackground ( unselectable_drawable );
+                    button.setTextColor ( unselectable_text_color );
                 }
             }
         }
@@ -133,34 +184,50 @@ public class ViewSelection extends LinearLayout {
 
     public ViewSelection(Context context, AttributeSet attrs) {
         super ( context, attrs );
+        this.mContext = context;
         makeView (context, attrs);
     }
 
     public ViewSelection(Context context, AttributeSet attrs, int defStyleAttr) {
         super ( context, attrs, defStyleAttr );
+        this.mContext = context;
         makeView ( context, attrs );
     }
 
     private void makeView(Context context, AttributeSet attrs) {
-        selected_state = context.getResources ().getDrawable ( R.drawable.selected_stated );
-        unselected_state = context.getResources ().getDrawable ( R.drawable.unselected_state );
         View view = LayoutInflater.from ( context ).inflate ( R.layout.viewselection_parent_view, this, true );
         LinearLayout linearLayout = view.findViewById ( R.id.parent );
         TypedArray typedArray = context.
                 obtainStyledAttributes(attrs, R.styleable.ViewSelection, 0, 0);
-        selected_text_color = typedArray.getInt ( R.styleable.ViewSelection_selected_text_color, context.getResources ().getColor ( R.color.selected_text_clolor ) );
-        unselected_text_color = typedArray.getInt ( R.styleable.ViewSelection_unselected_text_color, context.getResources ().getColor ( R.color.unselected_text_color ) );
+        selected_state_background = typedArray.getResourceId ( R.styleable.ViewSelection_selected_background, R.drawable.selected_stated );
+        selected_state_drawable = context.getResources ().getDrawable ( selected_state_background );
+        unselected_state_background = typedArray.getResourceId ( R.styleable.ViewSelection_unselected_background, R.drawable.unselected_state );
+        unselected_state_drawbale = context.getResources ().getDrawable ( unselected_state_background );
+        unselectable_background = typedArray.getResourceId ( R.styleable.ViewSelection_unselectable_background, R.drawable.unselected_state );
+        unselectable_drawable = context.getResources ().getDrawable ( unselectable_background );
+        selected_text_color = typedArray.getInt ( R.styleable.ViewSelection_selected_text_color, R.color.selected_text_clolor );
+        unselected_text_color = typedArray.getInt ( R.styleable.ViewSelection_unselected_text_color, R.color.unselected_text_color ) ;
+        unselectable_text_color = typedArray.getInt ( R.styleable.ViewSelection_unselectable_text_color,  R.color.unselectable_text_color );
+        selectable = typedArray.getBoolean ( R.styleable.ViewSelection_selectable, false );
         single_select = typedArray.getBoolean ( R.styleable.ViewSelection_single_select, false );
-        if( typedArray.hasValue ( R.styleable.ViewSelection_number_of_views)){
-            numOfViews = typedArray.getInt ( R.styleable.ViewSelection_number_of_views, 1 );
-            if( !typedArray.hasValue ( R.styleable.ViewSelection_button_type ) &&
-                    !typedArray.hasValue ( R.styleable.ViewSelection_edittext_type )){
+        numOfViews = typedArray.getInt ( R.styleable.ViewSelection_number_of_views, 1 );
+        button_type= typedArray.getBoolean ( R.styleable.ViewSelection_button_type, false );
+        edittext_type = typedArray.getBoolean ( R.styleable.ViewSelection_edittext_type, false );
+        if( !typedArray.hasValue ( R.styleable.ViewSelection_button_type ) &&
+               !typedArray.hasValue ( R.styleable.ViewSelection_edittext_type )){
                 throw new RuntimeException ( ViewSelection.class.getSimpleName () + " must have a view type!" );
-            }else{
-                if( typedArray.getBoolean ( R.styleable.ViewSelection_button_type , false) ){
-                    for( int i = 0 ; i < typedArray.getInt ( R.styleable.ViewSelection_number_of_views , 1 ); i++){
+        }else if ( button_type && edittext_type ) {
+            throw new RuntimeException ( ViewSelection.class.getSimpleName () + " can only have a single view type\nCurrently has both button type and EditText type!" );
+        }else
+                if( button_type ){
+                    for( int i = 0 ; i < numOfViews ; i++){
                         Button button = new Button ( context );
-                        button.setBackgroundResource ( typedArray.getResourceId ( R.styleable.ViewSelection_unselected_background, R.drawable.unselected_state ) );
+                        button.setPadding ( 10, 10,10,10 );
+                        if( selectable )
+                            button.setBackgroundResource ( unselected_state_background );
+                        else{
+                            button.setBackgroundResource ( unselectable_background );
+                        }
                         LayoutParams layoutParams = new LayoutParams ( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
                         layoutParams.setMargins ( 10, 10, 10, 10 );
                         button.setLayoutParams ( layoutParams );
@@ -169,9 +236,10 @@ public class ViewSelection extends LinearLayout {
                         buttons.add ( button );
                         linearLayout.addView ( button );
                     }
-                }else if ( typedArray.getBoolean ( R.styleable.ViewSelection_edittext_type, false ) ) {
-                    for (int i = 0; i < typedArray.getInt ( R.styleable.ViewSelection_number_of_views, 1 ); i++) {
+                }else if ( edittext_type ) {
+                    for (int i = 0; i < numOfViews; i++) {
                         EditText editText = new EditText ( context );
+                        editText.setPadding ( 10, 10 ,10, 10 );
                         LayoutParams layoutParams = new LayoutParams ( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
                         layoutParams.setMargins ( 10, 10, 10, 10 );
                         editText.setLayoutParams ( layoutParams );
@@ -180,8 +248,6 @@ public class ViewSelection extends LinearLayout {
                     }
                 }
             }
-        }
-    }
     public void setTextToButtons( String text, int position ){
         buttons.get ( position ).setText ( text );
     }

@@ -10,4 +10,6 @@
     <color name="unselected_background_color">#f1f3f8</color>
     <color name="unselected_text_color">#a8b2c1</color>
 
+    <color name="unselectable_text_color">#123456</color>
+
 </resources>

@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_main );
-
         buttons = findViewById ( R.id.buttons );
         buttons.setOnSingleItemSelectedListener ( this );
         buttons.setOnMultiItemSelectedListener ( this );
