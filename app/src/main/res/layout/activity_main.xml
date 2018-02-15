@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     tools:context="com.medlynk.shahab.MainActivity">
 
-    <com.medlynk.shahab.ViewSelection
+    <com.medlynk.shahab.myviewselection.ViewSelection
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/buttons"
         app:button_type="true"
         app:number_of_views="3"
-        app:single_select="true">
-    </com.medlynk.shahab.ViewSelection>
+        app:single_select="false"
+        android:id="@+id/buttons"
+        ></com.medlynk.shahab.myviewselection.ViewSelection>
 
 </RelativeLayout>

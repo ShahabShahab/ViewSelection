@@ -27,6 +27,24 @@ public class ViewSelection extends LinearLayout {
     private int currentSelection = -1;
     private Drawable selected_state, unselected_state;
     private int selected_text_color, unselected_text_color;
+    private OnSingleItemSelectedListener onSingleItemSelectedListener;
+    private OnMultiItemSelectedListener onMultiItemSelectedListener;
+
+    public OnMultiItemSelectedListener getOnMultiItemSelectedListener() {
+        return onMultiItemSelectedListener;
+    }
+
+    public void setOnMultiItemSelectedListener(OnMultiItemSelectedListener onMultiItemSelectedListener) {
+        this.onMultiItemSelectedListener = onMultiItemSelectedListener;
+    }
+
+    public OnSingleItemSelectedListener getOnSingleItemSelectedListener() {
+        return onSingleItemSelectedListener;
+    }
+
+    public void setOnSingleItemSelectedListener(OnSingleItemSelectedListener onSingleItemSelectedListener) {
+        this.onSingleItemSelectedListener = onSingleItemSelectedListener;
+    }
 
     public List<Button> getButtons() {
         return buttons;
@@ -36,7 +54,7 @@ public class ViewSelection extends LinearLayout {
         this.buttons = buttons;
     }
 
-    public List<EditText> getEditTexts() {
+    public List<EditText> getEditTexts(){
         return editTexts;
     }
 
@@ -85,6 +103,7 @@ public class ViewSelection extends LinearLayout {
         public void onClick(View view) {
             currentSelection = view.getId ();
             if( single_select ){
+                onSingleItemSelectedListener.onSingleItemSelected ( currentSelection );
                 for (Button button : buttons) {
                     if( button.getId () == currentSelection){
                         button.setTextColor ( selected_text_color );
@@ -98,7 +117,9 @@ public class ViewSelection extends LinearLayout {
                 if( buttons.get ( currentSelection ).getBackground ().equals ( selected_state ) ) {
                     buttons.get ( currentSelection ).setBackgroundDrawable ( unselected_state );
                     buttons.get ( currentSelection ).setTextColor (unselected_text_color);
+                    onMultiItemSelectedListener.onMultiItemDeselected ( currentSelection );
                 }else{
+                    onMultiItemSelectedListener.onMultiItemSelected ( currentSelection );
                     buttons.get ( currentSelection ).setBackgroundDrawable ( selected_state );
                     buttons.get ( currentSelection ).setTextColor ( selected_text_color );
                 }
@@ -172,5 +193,13 @@ public class ViewSelection extends LinearLayout {
     }
     public int getCurrentSelection() {
         return currentSelection;
+    }
+
+    public interface OnSingleItemSelectedListener {
+        void onSingleItemSelected(int position );
+    }
+    public interface OnMultiItemSelectedListener{
+        void onMultiItemSelected(Integer position);
+        void onMultiItemDeselected(Integer position);
     }
 }
