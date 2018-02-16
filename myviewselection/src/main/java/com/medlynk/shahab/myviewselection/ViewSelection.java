@@ -223,10 +223,13 @@ public class ViewSelection extends LinearLayout {
                     for( int i = 0 ; i < numOfViews ; i++){
                         Button button = new Button ( context );
                         button.setPadding ( 10, 10,10,10 );
-                        if( selectable )
+                        if( selectable ){
                             button.setBackgroundResource ( unselected_state_background );
+                            button.setTextColor ( unselected_text_color );
+                        }
                         else{
                             button.setBackgroundResource ( unselectable_background );
+                            button.setTextColor ( unselectable_text_color );
                         }
                         LayoutParams layoutParams = new LayoutParams ( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
                         layoutParams.setMargins ( 10, 10, 10, 10 );

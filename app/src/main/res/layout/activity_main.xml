@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         app:button_type="true"
         app:number_of_views="3"
-        app:selectable="false"
+        app:selectable="true"
+        app:single_select="true"
         android:id="@+id/buttons"
         ></com.medlynk.shahab.myviewselection.ViewSelection>
 
