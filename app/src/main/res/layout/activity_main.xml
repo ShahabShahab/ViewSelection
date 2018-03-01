@@ -8,13 +8,22 @@
     tools:context="com.medlynk.shahab.MainActivity">
 
     <com.medlynk.shahab.myviewselection.ViewSelection
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:button_type="true"
+        app:number_of_views="3"
+        app:selectable="true"
+        app:single_select="true"
+        android:id="@+id/buttons"/>
+
+    <com.medlynk.shahab.myviewselection.ViewSelection
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:button_type="true"
         app:number_of_views="3"
         app:selectable="true"
         app:single_select="true"
-        android:id="@+id/buttons"
-        ></com.medlynk.shahab.myviewselection.ViewSelection>
+        android:id="@+id/buttons2"
+        android:layout_toRightOf="@id/buttons"/>
 
 </RelativeLayout>
