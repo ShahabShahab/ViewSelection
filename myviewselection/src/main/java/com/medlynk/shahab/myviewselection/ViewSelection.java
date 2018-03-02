@@ -3,6 +3,7 @@ package com.medlynk.shahab.myviewselection;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.icu.text.RelativeDateTimeFormatter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -256,6 +257,26 @@ public class ViewSelection extends LinearLayout {
 }
     public void setTextToButtons( String text, int position ){
         buttons.get ( position ).setText ( text );
+    }
+    public void setClear(){
+        for (Button button : buttons) {
+            button.setTextColor ( unselected_text_color );
+            button.setBackground ( unselected_state_drawbale );
+        }
+        if( single_select )
+            if( onSingleItemSelectedListener == null ){
+                throw new RuntimeException ( getmContext ().toString () + "" +
+                    " must implement OnSingleItemSelectedListener" );
+            }else{
+            onSingleItemSelectedListener.onSingleItemSelected ( null, -1 );
+        } else{
+                if( onMultiItemSelectedListener == null ){
+                    throw new RuntimeException ( getmContext ().toString () +
+                    " must implement OnMultiItemSelectedListener");
+                }else{
+                    onMultiItemSelectedListener.onMultiItemDeselected ( null, -1 );
+                }
+        }
     }
     public void setTextToEditTexts( String text, int position ){
         editTexts.get ( position ).setText ( text );

@@ -3,6 +3,7 @@ package com.medlynk.shahab;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.medlynk.shahab.myviewselection.ViewSelection;
 import com.medlynk.shahab.viewselection.R;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements
 
     ViewSelection buttons;
     ViewSelection buttons2;
+    Button clear;
 
     String text[] = {"shahab", "mammad", "shakib"};
     private List<Integer> selectedItems = new ArrayList<> (  );
@@ -24,21 +26,29 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_main );
+        clear = findViewById ( R.id.button );
         buttons = findViewById ( R.id.buttons );
         buttons2 = findViewById ( R.id.buttons2 );
         buttons.setOnSingleItemSelectedListener ( this );
         buttons2.setOnSingleItemSelectedListener ( this );
         buttons.setOnMultiItemSelectedListener ( this );
+        buttons2.setOnMultiItemSelectedListener ( this );
         for (int i = 0 ; i < buttons.getNumberOfViews (); i++){
             buttons.setTextToButtons ( text[i], i );
         }
+        clear.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                buttons.setClear ();
+                buttons2.setClear ();
+            }
+        } );
     }
 
     @Override
     public void onSingleItemSelected(View view, int position) {
         System.out.println ( "MainActivity.onSingleItemSelected" );
-        System.out.println ( "position = [" + position + "]" );
-        System.out.println (view.getId ());
+        System.out.println ( "view = [" + view + "], position = [" + position + "]" );
     }
 
     @Override
