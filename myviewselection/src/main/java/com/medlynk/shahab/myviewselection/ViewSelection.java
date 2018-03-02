@@ -25,6 +25,8 @@ public class ViewSelection extends LinearLayout {
     int numOfViews = 0;
     Boolean selectable = false;
     private int currentSelection = -1;
+    private int previous_selection = -1;
+
     private int selected_state_background;
     private int unselected_state_background;
     private int unselectable_background;
@@ -96,10 +98,6 @@ public class ViewSelection extends LinearLayout {
         this.editTexts = editTexts;
     }
 
-    public int getNumOfViews() {
-        return numOfViews;
-    }
-
     public void setNumOfViews(int numOfViews) {
         this.numOfViews = numOfViews;
     }
@@ -140,16 +138,23 @@ public class ViewSelection extends LinearLayout {
                 if (single_select) {
                     if (onSingleItemSelectedListener == null) {
                         throw new RuntimeException ( getmContext ().toString () + "must implement " + OnSingleItemSelectedListener.class.getSimpleName () );
-                    } else
+                    } else if( getNumberOfViews () == 1 && buttons.get ( 0 ).getBackground ().equals ( selected_state_drawable ) ){
+                        buttons.get (0).setTextColor ( unselected_text_color );
+                        buttons.get ( 0 ).setBackground ( unselected_state_drawbale );
+                        onSingleItemSelectedListener.onSingleItemSelected ( ViewSelection.this,  -1);
+                    } else{
                         onSingleItemSelectedListener.onSingleItemSelected ( ViewSelection.this, currentSelection );
-                    for (Button button : buttons) {
-                        if (button.getId () == currentSelection) {
-                            button.setTextColor ( selected_text_color );
-                            button.setBackground ( selected_state_drawable );
-                        } else {
-                            button.setBackground ( unselected_state_drawbale );
-                            button.setTextColor ( unselected_text_color );
+                        for (Button button : buttons) {
+                            if (button.getId () == currentSelection) {
+                                button.setTextColor ( selected_text_color );
+                                button.setBackground ( selected_state_drawable );
+                            }
+                            else if ( button.getId () == previous_selection ) {
+                                button.setTextColor ( unselected_text_color );
+                                button.setBackground ( unselected_state_drawbale );
+                            }
                         }
+                        previous_selection = currentSelection;
                     }
                 } else {
                     if (buttons.get ( currentSelection ).getBackground ().equals ( selected_state_drawable )) {

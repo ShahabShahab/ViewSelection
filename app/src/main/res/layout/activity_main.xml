@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:button_type="true"
-        app:number_of_views="3"
+        app:number_of_views="1"
         app:selectable="true"
         app:single_select="true"
         android:id="@+id/buttons"/>
