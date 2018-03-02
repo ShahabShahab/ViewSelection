@@ -13,7 +13,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         ViewSelection.OnSingleItemSelectedListener,
-        ViewSelection.OnMultiItemSelectedListener
+        ViewSelection.OnMultiItemSelectedListener,
+        ViewSelection.OnClearStateListener
         {
 
     ViewSelection buttons;
@@ -30,25 +31,25 @@ public class MainActivity extends AppCompatActivity implements
         buttons = findViewById ( R.id.buttons );
         buttons2 = findViewById ( R.id.buttons2 );
         buttons.setOnSingleItemSelectedListener ( this );
+        buttons2.setOnClearStateListener ( this );
         buttons2.setOnSingleItemSelectedListener ( this );
         buttons.setOnMultiItemSelectedListener ( this );
+        buttons.setOnClearStateListener ( this );
         buttons2.setOnMultiItemSelectedListener ( this );
         for (int i = 0 ; i < buttons.getNumberOfViews (); i++){
             buttons.setTextToButtons ( text[i], i );
         }
-        clear.setOnClickListener ( new View.OnClickListener () {
-            @Override
-            public void onClick(View view) {
-                buttons.setClear ();
-                buttons2.setClear ();
-            }
-        } );
     }
 
     @Override
     public void onSingleItemSelected(View view, int position) {
         System.out.println ( "MainActivity.onSingleItemSelected" );
         System.out.println ( "view = [" + view + "], position = [" + position + "]" );
+        if(  view.getId () == buttons.getId () ){
+            buttons2.setClear ();
+        }else if ( view.getId () == buttons2.getId () ){
+            buttons.setClear ();
+        }
     }
 
     @Override
@@ -69,4 +70,14 @@ public class MainActivity extends AppCompatActivity implements
             System.out.println ("integer = " + integer);
         }
     }
-}
+
+            @Override
+            public void onClearState(View view) {
+                System.out.println ( "MainActivity.onClearState" );
+                if( view.getId () == buttons.getId () ){
+                    System.out.println ("view.getId () == buttons.getId ()");
+                } else if( view.getId () == buttons2.getId () ){
+                    System.out.println ("view.getId () == buttons2.getId ()");
+                }
+            }
+        }

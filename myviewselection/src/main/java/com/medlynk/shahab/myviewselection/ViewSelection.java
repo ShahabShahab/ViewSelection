@@ -3,7 +3,6 @@ package com.medlynk.shahab.myviewselection;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.icu.text.RelativeDateTimeFormatter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +33,7 @@ public class ViewSelection extends LinearLayout {
 
     private int selected_text_color, unselected_text_color, unselectable_text_color;
     private OnSingleItemSelectedListener onSingleItemSelectedListener;
+    private OnClearStateListener onClearStateListener;
     private OnMultiItemSelectedListener onMultiItemSelectedListener;
     private Context mContext;
     Boolean single_select = false;
@@ -49,6 +49,14 @@ public class ViewSelection extends LinearLayout {
 
     public void setUnselectable_background(int unselectable_background) {
         this.unselectable_background = unselectable_background;
+    }
+
+    public OnClearStateListener getOnClearStateListener() {
+        return onClearStateListener;
+    }
+
+    public void setOnClearStateListener(OnClearStateListener onClearStateListener) {
+        this.onClearStateListener = onClearStateListener;
     }
 
     public Context getmContext() {
@@ -263,20 +271,12 @@ public class ViewSelection extends LinearLayout {
             button.setTextColor ( unselected_text_color );
             button.setBackground ( unselected_state_drawbale );
         }
-        if( single_select )
-            if( onSingleItemSelectedListener == null ){
+            if( onClearStateListener == null ){
                 throw new RuntimeException ( getmContext ().toString () + "" +
-                    " must implement OnSingleItemSelectedListener" );
-            }else{
-            onSingleItemSelectedListener.onSingleItemSelected ( null, -1 );
-        } else{
-                if( onMultiItemSelectedListener == null ){
-                    throw new RuntimeException ( getmContext ().toString () +
-                    " must implement OnMultiItemSelectedListener");
-                }else{
-                    onMultiItemSelectedListener.onMultiItemDeselected ( null, -1 );
-                }
-        }
+                    " must implement OnClearStateListener" );
+            }else {
+                onClearStateListener.onClearState ( ViewSelection.this );
+            }
     }
     public void setTextToEditTexts( String text, int position ){
         editTexts.get ( position ).setText ( text );
@@ -294,5 +294,8 @@ public class ViewSelection extends LinearLayout {
     public interface OnMultiItemSelectedListener{
         void onMultiItemSelected(View view, Integer position);
         void onMultiItemDeselected( View view,  Integer position);
+    }
+    public interface OnClearStateListener{
+        void onClearState(View view);
     }
 }

@@ -22,7 +22,7 @@
         app:button_type="true"
         app:number_of_views="3"
         app:selectable="true"
-        app:single_select="false"
+        app:single_select="true"
         android:id="@+id/buttons2"
         android:layout_toRightOf="@id/buttons"/>
 
