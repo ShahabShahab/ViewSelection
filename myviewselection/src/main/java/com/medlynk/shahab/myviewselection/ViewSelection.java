@@ -212,6 +212,7 @@ public class ViewSelection extends LinearLayout {
     private void makeView(Context context, AttributeSet attrs) {
         View view = LayoutInflater.from ( context ).inflate ( R.layout.viewselection_parent_view, this, true );
         LinearLayout linearLayout = view.findViewById ( R.id.parent );
+        linearLayout.setOrientation ( HORIZONTAL );
         TypedArray typedArray = context.
                 obtainStyledAttributes ( attrs, R.styleable.ViewSelection, 0, 0 );
         selected_state_background = typedArray.getResourceId ( R.styleable.ViewSelection_selected_background, R.drawable.selected_stated );
