@@ -208,7 +208,7 @@ public class ViewSelection extends LinearLayout {
         this.mContext = context;
         makeView ( context, attrs );
     }
-  
+ 
     private void makeView(Context context, AttributeSet attrs) {
         View view = LayoutInflater.from ( context ).inflate ( R.layout.viewselection_parent_view, this, true );
         LinearLayout linearLayout = view.findViewById ( R.id.parent );
