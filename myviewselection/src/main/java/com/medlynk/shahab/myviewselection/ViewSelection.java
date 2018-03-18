@@ -149,25 +149,25 @@ public class ViewSelection extends LinearLayout {
                         throw new RuntimeException ( getmContext ().toString () + "must implement " + OnSingleItemSelectedListener.class.getSimpleName () );
                     } else if( getNumberOfViews () == 1 && buttons.get ( 0 ).getBackground ().equals ( selected_state_drawable ) ){
                         buttons.get (0).setTextColor ( unselected_text_color );
-                        buttons.get ( 0 ).setBackground ( unselected_state_drawbale );
+                        buttons.get ( 0 ).setBackgroundDrawable ( unselected_state_drawbale );
                         onSingleItemSelectedListener.onSingleItemSelected ( ViewSelection.this,  -1);
                     } else{
                         onSingleItemSelectedListener.onSingleItemSelected ( ViewSelection.this, currentSelection );
                         for (Button button : buttons) {
                             if (button.getId () == currentSelection) {
                                 button.setTextColor ( selected_text_color );
-                                button.setBackground ( selected_state_drawable );
+                                button.setBackgroundDrawable ( selected_state_drawable );
                             }
                             else if ( button.getId () == previous_selection ) {
                                 button.setTextColor ( unselected_text_color );
-                                button.setBackground ( unselected_state_drawbale );
+                                button.setBackgroundDrawable ( unselected_state_drawbale );
                             }
                         }
                         previous_selection = currentSelection;
                     }
                 } else {
                     if (buttons.get ( currentSelection ).getBackground ().equals ( selected_state_drawable )) {
-                        buttons.get ( currentSelection ).setBackground ( unselected_state_drawbale );
+                        buttons.get ( currentSelection ).setBackgroundDrawable ( unselected_state_drawbale );
                         buttons.get ( currentSelection ).setTextColor ( unselected_text_color );
                         if (onMultiItemSelectedListener == null) {
                             throw new RuntimeException ( getmContext ().toString () + "must implement " + OnMultiItemSelectedListener.class.getSimpleName () );
@@ -180,13 +180,13 @@ public class ViewSelection extends LinearLayout {
                         } else {
                             onMultiItemSelectedListener.onMultiItemSelected ( ViewSelection.this,  currentSelection );
                         }
-                        buttons.get ( currentSelection ).setBackground ( selected_state_drawable );
+                        buttons.get ( currentSelection ).setBackgroundDrawable ( selected_state_drawable );
                         buttons.get ( currentSelection ).setTextColor ( selected_text_color );
                     }
                 }
             } else {
                 for (Button button : buttons) {
-                    button.setBackground ( unselectable_drawable );
+                    button.setBackgroundDrawable ( unselectable_drawable );
                     button.setTextColor ( unselectable_text_color );
                 }
             }
@@ -268,15 +268,16 @@ public class ViewSelection extends LinearLayout {
         buttons.get ( position ).setText ( text );
     }
     public void setClear(){
-        for (Button button : buttons) {
-            button.setTextColor ( unselected_text_color );
-            button.setBackground ( unselected_state_drawbale );
-        }
-            if( onClearStateListener == null ){
-                throw new RuntimeException ( getmContext ().toString () + "" +
-                    " must implement OnClearStateListener" );
-            }else {
-                onClearStateListener.onClearState ( ViewSelection.this );
+            for (Button button : buttons) {
+                if( button.getBackground().equals(selected_state_drawable) ){
+                    System.out.println("button.getBackground().equals(selected_state_drawable)");
+                    button.setBackgroundDrawable(unselected_state_drawbale);
+                    if( onClearStateListener == null ){
+                        throw new RuntimeException(getmContext().toString() + " must implement OnClearStateListener");
+                    }else{
+                        onClearStateListener.onClearState(this);
+                    }
+                }
             }
     }
     public void setTextToEditTexts( String text, int position ){
