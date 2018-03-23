@@ -156,26 +156,16 @@ public class ViewSelection extends LinearLayout {
                         buttons.get ( currentSelection ).setBackgroundDrawable ( selected_state_drawable );
                         onSingleItemSelectedListener.onSingleItemSelected ( ViewSelection.this,
                                 currentSelection );
-//                        for (Button button : buttons) {
-//                            if (button.getId () == currentSelection) {
-//                                button.setTextColor ( selected_text_color );
-//                                button.setBackgroundDrawable ( selected_state_drawable );
-//                            }
-//                            else if ( button.getId () == previous_selection ) {
-//                                button.setTextColor ( unselected_text_color );
-//                                button.setBackgroundDrawable ( unselected_state_drawbale );
-//                            }
-//                        }
-//
-//                        if( previous_selection == -1 ){
-//
-//                        }
-//
-//                        buttons.get ( previous_selection ).setTextColor ( unselected_text_color );
-//                        buttons.get ( previous_selection ).setBackgroundDrawable ( unselected_state_drawbale );
-//                        buttons.get ( currentSelection ).setTextColor ( unselected_text_color );
-//                        buttons.get ( currentSelection ).setBackgroundDrawable ( unselected_state_drawbale );
-
+                        for (Button button : buttons) {
+                            if (button.getId () == currentSelection) {
+                                button.setTextColor ( selected_text_color );
+                                button.setBackgroundDrawable ( selected_state_drawable );
+                            }
+                            else if ( button.getId () == previous_selection ) {
+                                button.setTextColor ( unselected_text_color );
+                                button.setBackgroundDrawable ( unselected_state_drawbale );
+                            }
+                        }
                         previous_selection = currentSelection;
                     }
                 } else {
@@ -225,7 +215,6 @@ public class ViewSelection extends LinearLayout {
     private void makeView(Context context, AttributeSet attrs) {
         View view = LayoutInflater.from ( context ).inflate ( R.layout.viewselection_parent_view, this, true );
         LinearLayout linearLayout = view.findViewById ( R.id.parent );
-        linearLayout.setOrientation ( HORIZONTAL );
         TypedArray typedArray = context.
                 obtainStyledAttributes ( attrs, R.styleable.ViewSelection, 0, 0 );
         selected_state_background = typedArray.getResourceId ( R.styleable.ViewSelection_selected_background, R.drawable.selected_stated );
