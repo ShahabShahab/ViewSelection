@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:button_type="true"
-        app:number_of_views="1"
+        app:number_of_views="2"
         app:selectable="true"
         app:single_select="true"
         android:id="@+id/buttons"/>
@@ -20,18 +20,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:button_type="true"
+        android:layout_below="@id/buttons"
         app:number_of_views="3"
+        android:orientation="vertical"
         app:selectable="true"
         app:single_select="true"
-        android:id="@+id/buttons2"
-        android:layout_toRightOf="@id/buttons"/>
+        android:id="@+id/buttons2" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
-        android:text="clear"
+        android:background="@drawable/ic_action_name"
         />
 
 </RelativeLayout>

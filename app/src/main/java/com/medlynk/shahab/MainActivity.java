@@ -45,11 +45,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onSingleItemSelected(View view, int position) {
         System.out.println ( "MainActivity.onSingleItemSelected" );
         System.out.println ( "view = [" + view + "], position = [" + position + "]" );
-        if(  view.getId () == buttons.getId () ){
-            buttons2.setClear ();
-        }else if ( view.getId () == buttons2.getId () ){
-            buttons.setClear ();
-        }
     }
 
     @Override
