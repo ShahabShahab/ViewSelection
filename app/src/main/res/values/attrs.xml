@@ -7,6 +7,7 @@
         <attr name="button_type" format="boolean"></attr>
         <attr name="edittext_type" format="boolean"></attr>
         <attr name="single_select" format="boolean"></attr>
+        <attr name="mammad" format="boolean"></attr>
     </declare-styleable>
 
 </resources>

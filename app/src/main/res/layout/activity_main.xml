@@ -25,14 +25,14 @@
         android:orientation="vertical"
         app:selectable="true"
         app:single_select="false"
+        app:show_helpfully_layout ="true"
         android:id="@+id/buttons2" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/ic_action_name"
         />
 
 </RelativeLayout>

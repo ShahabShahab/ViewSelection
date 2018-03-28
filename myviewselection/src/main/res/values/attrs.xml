@@ -13,6 +13,7 @@
         <attr name="selectable" format="boolean"></attr>
         <attr name="unselectable_background" format="reference"></attr>
         <attr name="unselectable_text_color" format="reference"></attr>
+        <attr name="show_helpfully_layout" format="boolean"></attr>
 
     </declare-styleable>
 
