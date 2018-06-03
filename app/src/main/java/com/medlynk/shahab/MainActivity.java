@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView ( R.layout.activity_main );
         button = findViewById ( R.id.button );
         button.setOnClickListener ( new OnButtonClickListener () );
-        button.setEnabled ( false );
         buttons = findViewById ( R.id.buttons );
         buttons2 = findViewById ( R.id.buttons2 );
         buttons2.setOnHelpfullyOptionClickListener ( this );
@@ -47,6 +46,17 @@ public class MainActivity extends AppCompatActivity implements
         for (int i = 0; i < buttons.getNumberOfViews (); i++) {
             buttons.setTextToButtons ( text[i], i );
         }
+
+        findViewById ( R.id.button1 ).setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                if( buttons.isSelected ( 0 ) ){
+                    buttons.unSelect ( 0 );
+                }else{
+                    buttons.setSelect ( 0 );
+                }
+            }
+        } );
     }
 
     @Override
@@ -181,20 +191,8 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onClick(View view) {
             System.out.println ( "OnButtonClickListener.onClick" );
-            if (answers.size () > 0) {
-                boolean hasError = false;
-                for (int i = 0; i < answers.size (); i++) {
-                    if (answers.get ( i ).getHelpfully () == -1) {
-                        buttons2.showHelpfullyOptionError ( i, View.VISIBLE );
-                        hasError = !hasError;
-                        break;
-                    }
-                }
-
-                if (!hasError) {
-                    Toast.makeText ( MainActivity.this, "perfect", Toast.LENGTH_SHORT ).show ();
-                }
-            }
+            buttons2.getButtons ().get ( 0 ).setBackgroundDrawable ( getResources ()
+            .getDrawable ( R.drawable.selected_stated ));
         }
     }
 }

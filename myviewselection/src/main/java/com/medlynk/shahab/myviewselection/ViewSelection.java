@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,124 +30,28 @@ public class ViewSelection extends LinearLayout {
     List<TextView> helpfully_options_errors = new ArrayList<> ();
     int numOfViews = 0;
     Boolean selectable = false;
-    private int currentSelection = -1;
-    private int previous_selection = -1;
     HashMap<Integer, Integer> map = new HashMap<> ();
-
-    private int selected_state_background;
-    private int unselected_state_background;
-    private int unselectable_background;
-
-    private int selected_text_color, unselected_text_color, unselectable_text_color;
-    private OnSingleItemSelectedListener onSingleItemSelectedListener;
-    private OnClearStateListener onClearStateListener;
-    private OnMultiItemSelectedListener onMultiItemSelectedListener;
-    private OnHelpfullyOptionsClickListener onHelpfullyOptionClickListener;
-    private Context mContext;
     Boolean show_helpfully_layout = false;
     Boolean single_select = false;
     Boolean button_type = false;
     Boolean edittext_type = false;
+    private int currentSelection = -1;
+    private int previous_selection = -1;
+    private int selected_state_background;
+    private int unselected_state_background;
+    private int unselectable_background;
+    private int selected_text_color;
+    private int unselected_text_color;
+    private int unselectable_text_color;
+    private OnSingleItemSelectedListener onSingleItemSelectedListener;
+    private OnClearStateListener onClearStateListener;
+    private OnMultiItemSelectedListener onMultiItemSelectedListener;
+    private OnHelpfullyOptionsClickListener onHelpfullyOptionClickListener;
+    private Context context;
     private Drawable selected_state_drawable;
     private Drawable unselected_state_drawbale;
     private Drawable unselectable_drawable;
-
-    public int getUnselectable_background() {
-        return unselectable_background;
-    }
-
-    public void setUnselectable_background(int unselectable_background) {
-        this.unselectable_background = unselectable_background;
-    }
-
-    public OnClearStateListener getOnClearStateListener() {
-        return onClearStateListener;
-    }
-
-    public void setOnClearStateListener(OnClearStateListener onClearStateListener) {
-        this.onClearStateListener = onClearStateListener;
-    }
-
-    public Context getmContext() {
-        return mContext;
-    }
-
-    public void setmContext(Context mContext) {
-        this.mContext = mContext;
-    }
-
-    public Boolean getSelectable() {
-        return selectable;
-    }
-
-    public void setSelectable(Boolean selectable) {
-        this.selectable = selectable;
-    }
-
-    public OnMultiItemSelectedListener getOnMultiItemSelectedListener() {
-        return onMultiItemSelectedListener;
-    }
-
-    public void setOnMultiItemSelectedListener(OnMultiItemSelectedListener onMultiItemSelectedListener) {
-        this.onMultiItemSelectedListener = onMultiItemSelectedListener;
-    }
-
-    public OnSingleItemSelectedListener getOnSingleItemSelectedListener() {
-        return onSingleItemSelectedListener;
-    }
-
-    public void setOnSingleItemSelectedListener(OnSingleItemSelectedListener onSingleItemSelectedListener) {
-        this.onSingleItemSelectedListener = onSingleItemSelectedListener;
-    }
-
-    public List<Button> getButtons() {
-        return buttons;
-    }
-
-    public void setButtons(List<Button> buttons) {
-        this.buttons = buttons;
-    }
-
-    public List<EditText> getEditTexts() {
-        return editTexts;
-    }
-
-    public void setEditTexts(List<EditText> editTexts) {
-        this.editTexts = editTexts;
-    }
-
-    public void setNumOfViews(int numOfViews) {
-        this.numOfViews = numOfViews;
-    }
-
-    public Boolean getSingle_select() {
-        return single_select;
-    }
-
-    public void setSingle_select(Boolean single_select) {
-        this.single_select = single_select;
-    }
-
-    public void setCurrentSelection(int currentSelection) {
-        this.currentSelection = currentSelection;
-    }
-
-    public int getSelected_state_background() {
-        return selected_state_background;
-    }
-
-    public void setSelected_state_background(int selected_state_background) {
-        this.selected_state_background = selected_state_background;
-    }
-
-    public int getUnselected_state_background() {
-        return unselected_state_background;
-    }
-
-    public void setUnselected_state_background(int unselected_state_background) {
-        this.unselected_state_background = unselected_state_background;
-    }
-
+    private List<Boolean> selections = new LinkedList<> (  );
     private OnClickListener button_click_listener = new OnClickListener () {
         @Override
         public void onClick(View view) {
@@ -154,12 +59,15 @@ public class ViewSelection extends LinearLayout {
             if (selectable) {
                 if (single_select) {
                     if (onSingleItemSelectedListener == null) {
-                        throw new RuntimeException ( getmContext ().toString () + "must implement " + OnSingleItemSelectedListener.class.getSimpleName () );
-                    } else if (buttons.get ( currentSelection ).getBackground ().equals ( selected_state_drawable )) {
+                        throw new RuntimeException ( getCurrentContext ().toString () + "must implement " +
+                                OnSingleItemSelectedListener.class.getSimpleName () );
+                    } else if ( selections.get ( currentSelection ) ) {
                         buttons.get ( currentSelection ).setTextColor ( unselected_text_color );
                         buttons.get ( currentSelection ).setBackgroundDrawable ( unselected_state_drawbale );
+                        selections.set ( currentSelection, false );
                         onSingleItemSelectedListener.onSingleItemSelected ( ViewSelection.this, -1 );
                     } else {
+                        selections.set ( currentSelection, true );
                         buttons.get ( currentSelection ).setTextColor ( selected_text_color );
                         buttons.get ( currentSelection ).setBackgroundDrawable ( selected_state_drawable );
                         onSingleItemSelectedListener.onSingleItemSelected ( ViewSelection.this,
@@ -176,19 +84,21 @@ public class ViewSelection extends LinearLayout {
                         previous_selection = currentSelection;
                     }
                 } else {
-                    if (buttons.get ( currentSelection ).getBackground ().equals ( selected_state_drawable )) {
+                    if (selections.get ( currentSelection )) {
+                        selections.set ( currentSelection, false );
                         buttons.get ( currentSelection ).setBackgroundDrawable ( unselected_state_drawbale );
                         buttons.get ( currentSelection ).setTextColor ( unselected_text_color );
                         if (show_helpfully_layout)
                             helpfully_layouts.get ( currentSelection ).setVisibility ( View.GONE );
                         if (onMultiItemSelectedListener == null) {
-                            throw new RuntimeException ( getmContext ().toString () + "must implement " + OnMultiItemSelectedListener.class.getSimpleName () );
+                            throw new RuntimeException ( getCurrentContext ().toString () + "must implement " + OnMultiItemSelectedListener.class.getSimpleName () );
                         } else {
                             onMultiItemSelectedListener.onMultiItemDeselected ( ViewSelection.this, currentSelection );
                         }
                     } else {
+                        selections.set ( currentSelection, true );
                         if (onMultiItemSelectedListener == null) {
-                            throw new RuntimeException ( getmContext ().toString () + " must implement " + OnMultiItemSelectedListener.class.getSimpleName () );
+                            throw new RuntimeException ( getCurrentContext ().toString () + " must implement " + OnMultiItemSelectedListener.class.getSimpleName () );
                         } else {
                             onMultiItemSelectedListener.onMultiItemSelected ( ViewSelection.this, currentSelection );
                         }
@@ -213,14 +123,70 @@ public class ViewSelection extends LinearLayout {
 
     public ViewSelection(Context context, AttributeSet attrs) {
         super ( context, attrs );
-        this.mContext = context;
+        this.context = context;
         makeView ( context, attrs );
     }
 
     public ViewSelection(Context context, AttributeSet attrs, int defStyleAttr) {
         super ( context, attrs, defStyleAttr );
-        this.mContext = context;
+        this.context = context;
         makeView ( context, attrs );
+    }
+
+    public void setOnClearStateListener(OnClearStateListener onClearStateListener) {
+        this.onClearStateListener = onClearStateListener;
+    }
+
+    public Context getCurrentContext() {
+        return context;
+    }
+
+    public void setOnMultiItemSelectedListener(OnMultiItemSelectedListener onMultiItemSelectedListener) {
+        this.onMultiItemSelectedListener = onMultiItemSelectedListener;
+    }
+
+    public void setOnSingleItemSelectedListener(OnSingleItemSelectedListener onSingleItemSelectedListener) {
+        this.onSingleItemSelectedListener = onSingleItemSelectedListener;
+    }
+
+    public List<Button> getButtons() {
+        return buttons;
+    }
+
+    public List<EditText> getEditTexts() {
+        return editTexts;
+    }
+
+    public void setEditTexts(List<EditText> editTexts) {
+        this.editTexts = editTexts;
+    }
+
+    public void setNumOfViews(int numOfViews) {
+        this.numOfViews = numOfViews;
+    }
+
+    public Boolean getSingle_select() {
+        return single_select;
+    }
+
+    public void setSingle_select(Boolean single_select) {
+        this.single_select = single_select;
+    }
+
+    public int getSelected_state_background() {
+        return selected_state_background;
+    }
+
+    public void setSelected_state_background(int selected_state_background) {
+        this.selected_state_background = selected_state_background;
+    }
+
+    public int getUnselected_state_background() {
+        return unselected_state_background;
+    }
+
+    public void setUnselected_state_background(int unselected_state_background) {
+        this.unselected_state_background = unselected_state_background;
     }
 
     private void makeView(Context context, AttributeSet attrs) {
@@ -240,6 +206,7 @@ public class ViewSelection extends LinearLayout {
         selectable = typedArray.getBoolean ( R.styleable.ViewSelection_selectable, false );
         single_select = typedArray.getBoolean ( R.styleable.ViewSelection_single_select, false );
         numOfViews = typedArray.getInt ( R.styleable.ViewSelection_number_of_views, 1 );
+        initializeSelections ( numOfViews );
         button_type = typedArray.getBoolean ( R.styleable.ViewSelection_button_type, false );
         edittext_type = typedArray.getBoolean ( R.styleable.ViewSelection_edittext_type, false );
         show_helpfully_layout = typedArray.getBoolean ( R.styleable.ViewSelection_show_helpfully_layout, false );
@@ -299,6 +266,28 @@ public class ViewSelection extends LinearLayout {
         }
     }
 
+    private void initializeSelections(int numOfViews) {
+        for (int i = 0; i < numOfViews; i++) {
+            selections.add ( false );
+        }
+    }
+
+    public void setSelect(int numOfView){
+        buttons.get ( numOfView ).setBackgroundResource ( R.drawable.selected_stated );
+        buttons.get ( numOfView ).setTextColor ( selected_text_color );
+        selections.set ( numOfView, true );
+    }
+
+    public void unSelect(int numOfView){
+        buttons.get ( numOfView ).setBackgroundResource ( R.drawable.unselected_state );
+        buttons.get ( numOfView ).setTextColor ( unselected_text_color );
+        selections.set ( numOfView, false );
+    }
+
+    public boolean isSelected(int numOfView){
+        return selections.get ( numOfView );
+    }
+
     public void showHelpfullyOptionError(int position, int visibility_status) {
         helpfully_options_errors.get ( position ).setVisibility ( visibility_status );
     }
@@ -313,7 +302,7 @@ public class ViewSelection extends LinearLayout {
             button.setBackgroundDrawable ( unselected_state_drawbale );
         }
         if (onClearStateListener == null) {
-            throw new RuntimeException ( getmContext ().toString () + "" +
+            throw new RuntimeException ( getCurrentContext ().toString () + "" +
                     " must implement OnClearStateListener" );
         } else {
             onClearStateListener.onClearState ( ViewSelection.this );
@@ -332,8 +321,16 @@ public class ViewSelection extends LinearLayout {
         return currentSelection;
     }
 
+    public void setCurrentSelection(int currentSelection) {
+        this.currentSelection = currentSelection;
+    }
+
     public void setOnHelpfullyOptionClickListener(OnHelpfullyOptionsClickListener onHelpfullyOptionClickListener) {
         this.onHelpfullyOptionClickListener = onHelpfullyOptionClickListener;
+    }
+
+    private void hideHelpfullyOptionError(int position) {
+        helpfully_options_errors.get ( position ).setVisibility ( View.GONE );
     }
 
     public interface OnSingleItemSelectedListener {
@@ -368,36 +365,36 @@ public class ViewSelection extends LinearLayout {
             switch (id) {
                 case 0: {
                     if (onHelpfullyOptionClickListener == null) {
-                        throw new RuntimeException ( getmContext ().toString () + " must implement OnHelpfullyOptionsClickListener" );
+                        throw new RuntimeException ( getCurrentContext ().toString () + " must implement OnHelpfullyOptionsClickListener" );
                     } else {
                         if (map.get ( position ) == null) {
                             map.put ( position, 0 );
                             onHelpfullyOptionClickListener.onHelpFullyClicked ( position, 0 );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( 0 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorPrimary ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorPrimary ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                         } else if (map.get ( position ) != 0) {
                             onHelpfullyOptionClickListener.onHelpFullyClicked ( position, 0 );
                             map.clear ();
                             map.put ( position, 0 );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( 0 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorPrimary ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorPrimary ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                         } else {
                             onHelpfullyOptionClickListener.onHelpFullyClicked ( position, -1 );
                             if (map.containsValue ( 0 )) {
                                 ((TextView) (helpfully_layouts.get ( position ).findViewById ( 0 )))
-                                        .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                        .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                                 ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                        .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                        .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                                 ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                        .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                        .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                                 map.clear ();
                             }
                         }
@@ -407,35 +404,35 @@ public class ViewSelection extends LinearLayout {
                 }
                 case 1: {
                     if (onHelpfullyOptionClickListener == null) {
-                        throw new RuntimeException ( getmContext ().toString () + " must implement OnHelpfullyOptionsClickListener" );
+                        throw new RuntimeException ( getCurrentContext ().toString () + " must implement OnHelpfullyOptionsClickListener" );
                     } else if (map.get ( position ) == null) {
                         onHelpfullyOptionClickListener.onHelpFullyClicked ( position, 1 );
                         map.put ( position, 1 );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorPrimary ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorPrimary ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 0 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                     } else if (map.get ( position ) != 1) {
                         onHelpfullyOptionClickListener.onHelpFullyClicked ( position, 1 );
                         map.clear ();
                         map.put ( position, 1 );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorPrimary ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorPrimary ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 0 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                     } else {
                         onHelpfullyOptionClickListener.onHelpFullyClicked ( position, -1 );
                         if (map.containsValue ( 1 )) {
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( 0 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             map.clear ();
                         }
                     }
@@ -443,35 +440,35 @@ public class ViewSelection extends LinearLayout {
                 }
                 case 2: {
                     if (onHelpfullyOptionClickListener == null) {
-                        throw new RuntimeException ( getmContext ().toString () + " must implement OnHelpfullyOptionsClickListener" );
+                        throw new RuntimeException ( getCurrentContext ().toString () + " must implement OnHelpfullyOptionsClickListener" );
                     } else if (map.get ( position ) == null) {
                         onHelpfullyOptionClickListener.onHelpFullyClicked ( position, 2 );
                         map.put ( position, 2 );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorPrimary ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorPrimary ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 0 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                     } else if (map.get ( position ) != 2) {
                         onHelpfullyOptionClickListener.onHelpFullyClicked ( position, 2 );
                         map.clear ();
                         map.put ( position, 2 );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorPrimary ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorPrimary ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 0 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                         ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                     } else {
                         onHelpfullyOptionClickListener.onHelpFullyClicked ( position, -1 );
                         if (map.containsValue ( 2 )) {
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( 0 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 1 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             ((TextView) (helpfully_layouts.get ( position ).findViewById ( (int) 2 )))
-                                    .setTextColor ( mContext.getResources ().getColor ( R.color.colorAccent ) );
+                                    .setTextColor ( context.getResources ().getColor ( R.color.colorAccent ) );
                             map.clear ();
                         }
                     }
@@ -479,9 +476,5 @@ public class ViewSelection extends LinearLayout {
                 }
             }
         }
-    }
-
-    private void hideHelpfullyOptionError(int position) {
-        helpfully_options_errors.get ( position ).setVisibility ( View.GONE );
     }
 }

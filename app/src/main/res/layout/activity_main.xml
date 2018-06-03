@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,31 +7,36 @@
     tools:context="com.medlynk.shahab.MainActivity">
 
     <com.medlynk.shahab.myviewselection.ViewSelection
+        android:id="@+id/buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:button_type="true"
         app:number_of_views="2"
         app:selectable="true"
-        app:single_select="true"
-        android:id="@+id/buttons"/>
+        app:single_select="true" />
 
     <com.medlynk.shahab.myviewselection.ViewSelection
+        android:id="@+id/buttons2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:button_type="true"
         android:layout_below="@id/buttons"
-        app:number_of_views="3"
         android:orientation="vertical"
+        app:button_type="true"
+        app:number_of_views="3"
         app:selectable="true"
-        app:single_select="false"
-        app:show_helpfully_layout ="true"
-        android:id="@+id/buttons2" />
+        app:single_select="false" />
 
     <Button
+        android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/button" />
+
+    <Button
         android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
 
 </RelativeLayout>
